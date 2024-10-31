@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 class InputWidgetEmail extends StatefulWidget {
   final String emailLabelText;
   final String emailHintText;
+  final TextEditingController controller;
 
-  const InputWidgetEmail({super.key, 
+  const InputWidgetEmail({
+    super.key,
     this.emailLabelText = "Email",
     this.emailHintText = "Coloque seu email",
+    required this.controller,
   });
 
   @override
@@ -27,31 +30,23 @@ class _InputWidgetState extends State<InputWidgetEmail> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildEmailInput(widget.emailLabelText, widget.emailHintText, isEmailRequired),
-          const SizedBox(height: 2),
+          Text(
+            widget.emailLabelText,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: isEmailRequired ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          TextField(
+            controller: widget.controller,
+            decoration: InputDecoration(
+              hintText: widget.emailHintText,
+              border: InputBorder.none,
+            ),
+            keyboardType: TextInputType.emailAddress,
+          ),
         ],
       ),
-    );
-  }
-
-  Widget _buildEmailInput(String labelText, String hintText, bool isRequired) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          labelText,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: isRequired ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        TextField(
-          decoration: InputDecoration(
-            hintText: hintText,
-            border: InputBorder.none,
-          ),
-        ),
-      ],
     );
   }
 }
