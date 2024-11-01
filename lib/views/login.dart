@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './SignIn.dart';
+import './HomePage.dart';
 import './widgets/BtnNext.dart';
-import './widgets/InputField.dart'; // Atualize se o nome do arquivo for diferente
-import './widgets/InputFieldPswrd.dart'; // Atualize se o nome do arquivo for diferente
+import './widgets/InputField.dart';
+import './widgets/InputFieldPswrd.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -13,23 +14,21 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> _logIn() async {
+  Future<void> _signIn() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
       );
-
-      // Login bem-sucedido
-      print("Usuário logado: ${userCredential.user?.email}");
-      // Redirecionar ou mostrar mensagem de sucesso
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } catch (e) {
-      print("Erro ao fazer login: $e");
-      // Tratar erro (exibir mensagem ao usuário, etc.)
+      print(e);
     }
   }
 
@@ -54,17 +53,17 @@ class _LogInState extends State<LogIn> {
             ),
           ),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(234, 239, 255, 20),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(64),
-                ),
+              child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(234, 239, 255, 20),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(64),
               ),
-              child: SafeArea(
-                top: false,
-                child: SingleChildScrollView(
+            ),
+            child: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,15 +88,13 @@ class _LogInState extends State<LogIn> {
                             controller: _passwordController,
                           ),
                           const SizedBox(height: 40),
-                          Btnnext(
-                            buttonText: "ENTRAR",
-                            onPressed: _logIn,
-                          ),
+                          Btnnext(buttonText: "ENTRAR", onPressed: _signIn),
                           const SizedBox(height: 30),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(
                             "Não tem uma conta? ",
@@ -124,11 +121,9 @@ class _LogInState extends State<LogIn> {
                         ],
                       )
                     ],
-                  ),
-                ),
-              ),
+                  )),
             ),
-          )
+          ))
         ],
       ),
     );

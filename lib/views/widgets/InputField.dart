@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InputWidgetEmail extends StatefulWidget {
+class InputWidgetEmail extends StatelessWidget {
   final String emailLabelText;
   final String emailHintText;
   final TextEditingController controller;
@@ -13,14 +13,7 @@ class InputWidgetEmail extends StatefulWidget {
   });
 
   @override
-  _InputWidgetState createState() => _InputWidgetState();
-}
-
-class _InputWidgetState extends State<InputWidgetEmail> {
-  @override
   Widget build(BuildContext context) {
-    bool isEmailRequired = widget.emailLabelText.isNotEmpty;
-
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -30,23 +23,29 @@ class _InputWidgetState extends State<InputWidgetEmail> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.emailLabelText,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isEmailRequired ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          TextField(
-            controller: widget.controller,
-            decoration: InputDecoration(
-              hintText: widget.emailHintText,
-              border: InputBorder.none,
-            ),
-            keyboardType: TextInputType.emailAddress,
-          ),
+          _buildEmailInput(emailLabelText, emailHintText),
+          const SizedBox(height: 2),
         ],
       ),
+    );
+  }
+
+  Widget _buildEmailInput(String labelText, String hintText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          labelText,
+          style: const TextStyle(fontSize: 16),
+        ),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: InputBorder.none,
+          ),
+        ),
+      ],
     );
   }
 }

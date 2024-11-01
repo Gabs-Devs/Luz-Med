@@ -13,16 +13,14 @@ class InputWidgetPswrd extends StatefulWidget {
   });
 
   @override
-  _InputWidgetState createState() => _InputWidgetState();
+  State<InputWidgetPswrd> createState() => _InputWidgetPswrdState();
 }
 
-class _InputWidgetState extends State<InputWidgetPswrd> {
+class _InputWidgetPswrdState extends State<InputWidgetPswrd> {
   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    bool isPasswordRequired = widget.passwordLabelText.isNotEmpty;
-
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -32,33 +30,40 @@ class _InputWidgetState extends State<InputWidgetPswrd> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.passwordLabelText,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isPasswordRequired ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          TextField(
-            controller: widget.controller,
-            obscureText: !_isPasswordVisible,
-            decoration: InputDecoration(
-              hintText: widget.passwordHintText,
-              border: InputBorder.none,
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _isPasswordVisible = !_isPasswordVisible;
-                  });
-                },
-              ),
-            ),
-          ),
+          _buildPasswordInput(widget.passwordLabelText, widget.passwordHintText),
+          const SizedBox(height: 2),
         ],
       ),
+    );
+  }
+
+  Widget _buildPasswordInput(String labelText, String hintText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          labelText,
+          style: const TextStyle(fontSize: 16),
+        ),
+        TextField(
+          controller: widget.controller,
+          obscureText: !_isPasswordVisible,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: InputBorder.none,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _isPasswordVisible = !_isPasswordVisible;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
